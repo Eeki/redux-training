@@ -1,21 +1,46 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import _ from "lodash";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
+import { videoSearch } from "./actions/index"
+import SearchBar from "./components/search_bar";
+import VideoList from "./components/video_list";
+import VideoDetail from "./components/video_detail";
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            videos: [],
+            selectedVideo: null
+        };
+
+        props.videoSearch("cats");
+    }
+
+    render() {
+        const videoSearch = _.debounce(term => {
+            this.props.videoSearch(term);
+        }, 300);
+
+        return (
+            <div>
+                <SearchBar onSearchTermChange={videoSearch} />
+                <VideoDetail />
+                <VideoList videos={this.props.videos} />
+            </div>
+        );
+    }
 }
 
-export default App;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ videoSearch }, dispatch);
+}
+
+function mapStateToProps({ videos }) {
+    return { videos };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
