@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
 
 class VideoDetail extends Component {
 
     render() {
         const {video} = this.props;
-        console.log('video', video)
         if (!video) {
             return <div>Loading...</div>;
         }
@@ -27,9 +25,4 @@ class VideoDetail extends Component {
     }
 }
 
-function mapStateToProps({ selectedVideo }) {
-    return { video: selectedVideo };
-}
-
-
-export default connect(mapStateToProps)(VideoDetail);
+export default VideoDetail;
