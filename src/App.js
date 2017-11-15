@@ -1,6 +1,10 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import YTSearch from "youtube-api-search";
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+
+import {videoSearch} from './actions/index'
 
 import SearchBar from "./components/search_bar";
 import VideoList from "./components/video_list";
@@ -17,6 +21,7 @@ class App extends Component {
         };
 
         this.videoSearch("redux tutorials");
+        props.videoSearch("cats");
     }
 
     videoSearch(term) {
@@ -46,4 +51,8 @@ class App extends Component {
     }
 }
 
-export default App
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({videoSearch}, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(App);
